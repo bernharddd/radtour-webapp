@@ -1,4 +1,4 @@
-const CACHE = 'radtour-v4';
+const CACHE = 'radtour-v5';
 const URLS = ['./', 'index.html', 'manifest.json'];
 
 self.addEventListener('install', e => {
