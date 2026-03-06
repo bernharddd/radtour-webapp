@@ -58,7 +58,8 @@ const stages = [
    u:"https://www.google.com/maps/dir/48.9055457,12.6561928/48.5992683,13.3767113/@48.7709,12.9950,10z/data=!4m2!4m1!3e1"},
   {id:9,t:"kurz vor Passau → Untermühl",km:66,el:"147 hm",hp:"Erste 40 km flach, dann 2 starke Anstiege und anschl. Gefälle, Ende flach",
    c:["Passau (5 km)","Obernzell (25 km)"],l:["Dreiflüssestadt Passau / Dom (5 km)","Donauradweg (0–66 km)","Engelhartszell Kloster (30 km)","Schlögener Schlinge (45 km)"],
-   v:["🥐 Bäcker Bachmeier, Passau (5 km)","🛒 EDEKA, Passau (5 km)","🍽️ Gasthaus Kornexl, Obernzell (25 km)","🍽️ Landhotel Ernst, Untermühl (66 km)"],e:"🇦🇹",
+   v:["🥐 Bäcker Bachmeier, Passau (5 km)","🛒 EDEKA, Passau (5 km)","🍽️ Gasthaus Kornexl, Obernzell (25 km)","🍽️ Landhotel Ernst, Untermühl (66 km)"],
+   gr:"🇩🇪 → 🇦🇹 Grenze Deutschland / Österreich (10 km)",e:"🇦🇹",
    u:"https://www.google.com/maps/dir/48.5990702,13.3768391/48.4489141,13.8526752/48.4182748,13.9719854/@48.5082,13.6734,10z/data=!4m2!4m1!3e1"},
   {id:10,t:"Untermühl → Wallsee",km:78,el:"148 hm",hp:"Am Anfang sehr steiler Anstieg + Gefälle, Rest flach bis leicht bergab",
    c:["Ottensheim (26 km)","Linz (37 km)"],l:["Donauradweg (0–78 km)","Linz Altstadt (37 km)","Enns – älteste Stadt AT (55 km)","Strudengau (60–78 km)"],
@@ -74,11 +75,13 @@ const stages = [
    u:"https://www.google.com/maps/dir/48.3707403,15.4476517/48.3933531,15.4751172/48.2990366,16.3654614/@48.3394,15.8954,10z/data=!4m2!4m1!3e1"},
   {id:13,t:"Langenzersdorf → Bratislava",km:86,el:"52 hm",hp:"60 km flach, kleiner Anstieg + Gefälle, Ende flach",
    c:["Wien (12 km)","Bratislava (75 km)"],l:["Donauinsel Wien (5 km)","Nationalpark Donau-Auen (30–65 km)","Römerstadt Carnuntum (50 km)","Hainburg Altstadt (65 km)"],
-   v:["🥐 Bäckerei Der Mann, Langenzersdorf (0 km)","🛒 BILLA, Wien (12 km)","🍽️ Strandcafé, Wien Alte Donau (15 km)","🍽️ McDonald's, Bratislava (75 km)"],e:"🏙️",
+   v:["🥐 Bäckerei Der Mann, Langenzersdorf (0 km)","🛒 BILLA, Wien (12 km)","🍽️ Strandcafé, Wien Alte Donau (15 km)","🍽️ McDonald's, Bratislava (75 km)"],
+   gr:"🇦🇹 → 🇸🇰 Grenze Österreich / Slowakei (70 km)",e:"🏙️",
    u:"https://www.google.com/maps/dir/48.2990366,16.3654614/48.2017752,16.449447/48.1162706,17.080595/@48.2106,16.7131,10z/data=!4m2!4m1!3e1"},
   {id:14,t:"Bratislava → Böny",km:82,el:"47 hm",hp:"Erste 70 km flach, dann 30 hm Anstieg, kurz flach, kleines Gefälle, letzte 5 km flach",
    c:["Győr (63 km)"],l:["Bratislava Burg & Altstadt (0 km)","Donauradweg (0–60 km)","Szigetköz-Auenlandschaft (40–60 km)"],
-   v:["🥐 Cisárov Pekár, Bratislava-Petržalka (0 km)","🛒 Lidl, Győr (63 km)","🍽️ Aranyhal Étterem, Győr (63 km)","🍽️ Burger King, Győr (63 km)"],e:"🇭🇺",
+   v:["🥐 Cisárov Pekár, Bratislava-Petržalka (0 km)","🛒 Lidl, Győr (63 km)","🍽️ Aranyhal Étterem, Győr (63 km)","🍽️ Burger King, Győr (63 km)"],
+   gr:"🇸🇰 → 🇭🇺 Grenze Slowakei / Ungarn (15 km)",e:"🇭🇺",
    u:"https://www.google.com/maps/dir/48.1162706,17.080595/48.1421,17.1002/47.6875,17.6504/47.6599153,17.8203416/@47.8962,17.3732,10z/data=!4m2!4m1!3e1"},
   {id:15,t:"Böny → Fehérvárcsurgó",km:62,el:"177 hm",hp:"20 km flach, 20 km leicht bergauf, 20 km leicht bergab",
    c:["Kisbér (30 km)","Mór (51 km)"],l:["Abtei Pannonhalma UNESCO (15 km)","Bakonyalja-Hügelland (30–62 km)","Csesznek Burgruine (45 km)"],
@@ -144,6 +147,9 @@ function Card({ s, active, onTap }) {
           <span key={j} style={{ fontSize: 10, background: "rgba(34,197,94,0.12)", color: "rgba(134,239,172,0.9)", padding: "3px 9px", borderRadius: 12 }}>🏞️ {x}</span>
         ))}
       </div>
+      {s.gr && <div style={{ background: "rgba(255,255,255,0.06)", border: "1px dashed rgba(255,255,255,0.2)", borderRadius: 8, padding: "7px 10px", marginBottom: 10, textAlign: "center" }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "#facc15" }}>{s.gr}</div>
+      </div>}
       <div style={{ background: "rgba(251,146,60,0.08)", borderRadius: 8, padding: "6px 10px", marginBottom: 14 }}>
         <div style={{ fontSize: 9, color: "rgba(255,255,255,0.45)", fontWeight: 600, letterSpacing: 1, marginBottom: 4 }}>VERSORGUNG</div>
         {s.v.map((x, j) => (
