@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Radtour">
+  <meta name="theme-color" content="#0a0f0a">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <title>Radtour Heddesheim → Paloznak</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { background: #0a0f0a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow-x: hidden; }
+    #root { max-width: 480px; margin: 0 auto; min-height: 100vh; min-height: 100dvh; padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+const { useState } = React;
+const stages = [
+  {id:1,t:"Heddesheim → Schaafheim",km:74,el:"185 hm",tr:"Flach – Rheinebene & Bergstraße",h:["Mannheim","Lorsch (UNESCO)","Bergstraße"],e:"🏘️",
+   u:"https://www.google.com/maps/dir/49.5077027,8.6059128/49.7838179,8.6204896/49.9225,8.9975/@49.7151,8.8017,10z/data=!4m2!4m1!3e1"},
+  {id:2,t:"Schaafheim → Wertheim",km:71,el:"229 hm",tr:"Leicht hügelig – Main-Radweg",h:["Großwallstadt","Miltenberg","Collenberg"],e:"🍷",
+   u:"https://www.google.com/maps/dir/49.9225,8.9975/49.8933223,9.1587533/49.7018676,9.2411675/49.7061478,9.2600825/49.7904115,9.4256821/49.7602315,9.5189756/@49.7759,9.2553,10z/data=!4m2!4m1!3e1"},
+  {id:3,t:"Wertheim → Kitzingen",km:71,el:"239 hm",tr:"Wellig – Main & Weinland",h:["Würzburg","Ochsenfurt","Kitzingen"],e:"🍷",
+   u:"https://www.google.com/maps/dir/49.7602315,9.5189756/49.7667312,9.6309254/49.7752405,9.8488887/49.7864041,9.9273856/49.7265098,10.1601252/@49.7428,9.8131,10z/data=!4m2!4m1!3e1"},
+  {id:4,t:"Kitzingen → Herzogenaurach",km:71,el:"228 hm",tr:"Hügelig – Fränkisches Land",h:["Fränk. Weinland","Steigerwald"],e:"⛰️",
+   u:"https://www.google.com/maps/dir/49.7265098,10.1601252/49.699618,10.1485081/49.7047504,10.2194112/49.6950063,10.2740359/49.6225528,10.710795/49.5765989,10.8645937/@49.6516,10.5124,10z/data=!4m2!4m1!3e1"},
+  {id:5,t:"Herzogenaurach → Freystadt",km:73,el:"205 hm",tr:"Hügelig – über Nürnberg",h:["Nürnberg","Nürnberger Land"],e:"🏰",
+   u:"https://www.google.com/maps/dir/49.5765989,10.8645937/49.5563328,10.9676459/49.4542702,11.0745615/49.1880396,11.3345101/@49.3823,11.0996,10z/data=!4m2!4m1!3e1"},
+  {id:6,t:"Freystadt → Saal a.d. Donau",km:74,el:"187 hm",tr:"Abfallend – Altmühltal",h:["Main-Donau-Kanal","Altmühltal"],e:"🏰",
+   u:"https://www.google.com/maps/dir/49.1880396,11.3345101/49.1617725,11.4081595/49.0414998,11.4966515/48.9923313,11.6870152/48.9433842,11.7478331/48.927342,11.8124921/48.9075361,11.9265319/@49.0478,11.6305,10z/data=!4m2!4m1!3e1"},
+  {id:7,t:"Saal a.d. Donau → Steinach",km:77,el:"132 hm",tr:"Flach – Donauradweg",h:["Kelheim","Regensburg","Donau"],e:"🌊",
+   u:"https://www.google.com/maps/dir/48.9075361,11.9265319/48.9321754,12.0346055/48.9582248,11.9925382/48.9835566,12.0460628/49.0155351,12.0331405/49.0134297,12.1016236/48.9422501,12.6174241/@48.9249,12.2720,10z/data=!4m2!4m1!3e1"},
+  {id:8,t:"Steinach → Passau",km:79,el:"95 hm",tr:"Flach – Donauradweg",h:["Straubing","Deggendorf","Donau-Tal"],e:"🌊",
+   u:"https://www.google.com/maps/dir/48.9422501,12.6174241/48.5995329,13.3725165/@48.7709,12.9950,10z/data=!4m2!4m1!3e1"},
+  {id:9,t:"Passau → Hartkirchen",km:75,el:"172 hm",tr:"Donauradweg DE → AT",h:["Passau","Schlögener Schlinge","Grenze AT"],e:"🇦🇹",
+   u:"https://www.google.com/maps/dir/48.5995329,13.3725165/48.5827479,13.4092565/48.4434371,13.8781755/48.4168582,13.9742016/@48.5082,13.6734,10z/data=!4m2!4m1!3e1"},
+  {id:10,t:"Hartkirchen → Haag",km:78,el:"123 hm",tr:"Flach – Donau Oberösterreich",h:["Linz","Strudengau","Enns"],e:"🎵",
+   u:"https://www.google.com/maps/dir/48.4168582,13.9742016/48.3450051,14.0240784/48.3226639,14.3151378/48.1164764,14.6246422/@48.2667,14.2994,10z/data=!4m2!4m1!3e1"},
+  {id:11,t:"Haag → Weißenkirchen",km:80,el:"85 hm",tr:"Flach – Wachau (UNESCO)",h:["Stift Melk","Wachau","Spitz"],e:"🍷",
+   u:"https://www.google.com/maps/dir/48.1164764,14.6246422/48.3738167,15.4453348/@48.2451,15.0350,10z/data=!4m2!4m1!3e1"},
+  {id:12,t:"Weißenkirchen → Langenzersdorf",km:80,el:"85 hm",tr:"Flach – Donau nach Wien",h:["Krems","Tulln","Wien-Nähe"],e:"🏙️",
+   u:"https://www.google.com/maps/dir/48.3738167,15.4453348/48.3933531,15.4751172/48.3049078,16.3455591/@48.3394,15.8954,10z/data=!4m2!4m1!3e1"},
+  {id:13,t:"Langenzersdorf → Bratislava",km:82,el:"58 hm",tr:"Topfeben – Donau-Auen",h:["Wien","Donau-Auen","Bratislava"],e:"🏙️",
+   u:"https://www.google.com/maps/dir/48.3049078,16.3455591/48.2017752,16.449447/48.1162706,17.080595/@48.2106,16.7131,10z/data=!4m2!4m1!3e1"},
+  {id:14,t:"Bratislava → Győr",km:82,el:"57 hm",tr:"Topfeben – Donauebene",h:["Bratislava","Grenze HU","Győr"],e:"🇭🇺",
+   u:"https://www.google.com/maps/dir/48.1162706,17.080595/48.1421,17.1002/47.6875,17.6504/47.6761104,17.6657898/@47.8962,17.3732,10z/data=!4m2!4m1!3e1"},
+  {id:15,t:"Győr → Fehérvárcsurgó",km:71,el:"232 hm",tr:"Leicht hügelig – Tiefebene",h:["Pannonhalma","Bakony-Rand"],e:"🌻",
+   u:"https://www.google.com/maps/dir/47.6761104,17.6657898/47.2953196,18.2996731/@47.4857,17.9827,10z/data=!4m2!4m1!3e1"},
+  {id:16,t:"Fehérvárcsurgó → Paloznak",km:63,el:"224 hm",tr:"Hügelig → Balaton",h:["Székesfehérvár","Balatonfüred","Balaton!"],e:"🏖️",
+   u:"https://www.google.com/maps/dir/47.2953196,18.2996731/47.2052997,18.2574015/47.1527882,18.190257/47.0900025,18.0339073/46.9795072,17.9441389/@47.1374,18.1219,10z/data=!4m2!4m1!3e1"},
+];
+const TK = stages.reduce((a, s) => a + s.km, 0);
+const bgs = [
+  "linear-gradient(135deg,#1a3a2a,#2d5a3f)","linear-gradient(135deg,#2a1a3a,#4a2d6a)",
+  "linear-gradient(135deg,#3a2a1a,#6a4a2d)","linear-gradient(135deg,#1a2a3a,#2d4a6a)",
+  "linear-gradient(135deg,#1a3a3a,#2d5a6a)","linear-gradient(135deg,#3a1a2a,#6a2d4a)",
+  "linear-gradient(135deg,#2a3a1a,#4a6a2d)","linear-gradient(135deg,#1a1a3a,#2d2d6a)",
+  "linear-gradient(135deg,#3a3a1a,#6a6a2d)","linear-gradient(135deg,#1a3a1a,#2d6a2d)",
+  "linear-gradient(135deg,#2a2a3a,#4a4a6a)","linear-gradient(135deg,#3a1a1a,#6a2d2d)",
+  "linear-gradient(135deg,#1a2a2a,#2d4a4a)","linear-gradient(135deg,#2a1a2a,#4a2d4a)",
+  "linear-gradient(135deg,#2a3a2a,#3d6a3f)","linear-gradient(135deg,#1a2a1a,#2d5a2d)",
+];
+function Card({ s, active, onTap }) {
+  const i = s.id - 1;
+  const done = stages.slice(0, i).reduce((a, x) => a + x.km, 0);
+  return (
+    <div onClick={onTap} style={{
+      background: bgs[i % 16], borderRadius: 14, padding: 16, marginBottom: 10,
+      border: active ? "2px solid #f97316" : "2px solid rgba(255,255,255,0.06)",
+      cursor: active ? "default" : "pointer",
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+        <div>
+          <div style={{ fontSize: 10, fontWeight: 700, color: "#f97316", letterSpacing: 1.5 }}>TAG {s.id}</div>
+          <div style={{ fontSize: 17, fontWeight: 800, color: "#fff", marginTop: 2, lineHeight: 1.2 }}>{s.t}</div>
+        </div>
+        <div style={{ fontSize: 28 }}>{s.e}</div>
+      </div>
+      <div style={{ display: "flex", gap: 10, marginBottom: 10 }}>
+        <div style={{ flex: 1, background: "rgba(249,115,22,0.12)", borderRadius: 8, padding: "6px 8px", textAlign: "center" }}>
+          <div style={{ fontSize: 20, fontWeight: 800, color: "#facc15" }}>{s.km}</div>
+          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.45)", fontWeight: 600, letterSpacing: 1 }}>KM</div>
+        </div>
+        <div style={{ flex: 1, background: "rgba(249,115,22,0.12)", borderRadius: 8, padding: "6px 8px", textAlign: "center" }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: "#facc15" }}>{s.el}</div>
+          <div style={{ fontSize: 9, color: "rgba(255,255,255,0.45)", fontWeight: 600, letterSpacing: 1 }}>HÖHE</div>
+        </div>
+        <div style={{ flex: 1.5, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>km {done} – {done + s.km}</div>
+        </div>
+      </div>
+      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginBottom: 6 }}>{s.tr}</div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 14 }}>
+        {s.h.map((x, j) => (
+          <span key={j} style={{ fontSize: 10, background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.65)", padding: "3px 9px", borderRadius: 12 }}>{x}</span>
+        ))}
+      </div>
+      <a href={s.u} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{
+        display: "block", textAlign: "center", background: "linear-gradient(135deg,#f97316,#ea580c)",
+        color: "#fff", padding: 12, borderRadius: 10, textDecoration: "none", fontWeight: 700, fontSize: 14,
+        boxShadow: "0 3px 12px rgba(249,115,22,0.25)",
+      }}>
+        ▶ In Google Maps navigieren
+      </a>
+    </div>
+  );
+}
+function App() {
+  const [cur, setCur] = useState(-1);
+  const kmDone = cur >= 0 ? stages.slice(0, cur).reduce((a, s) => a + s.km, 0) : 0;
+  return (
+    <div style={{ background: "#0a0f0a", minHeight: "100vh", minHeight: "100dvh", maxWidth: 480, margin: "0 auto", fontFamily: "-apple-system,BlinkMacSystemFont,sans-serif" }}>
+      <div style={{ padding: "16px 16px 12px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <div style={{ fontSize: 18, fontWeight: 800, color: "#fff", marginBottom: 3 }}>🚲 Heddesheim → Paloznak</div>
+        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", letterSpacing: 0.5, marginBottom: 8 }}>{TK} KM · 16 TAGE · 4 LÄNDER</div>
+        <div style={{ width: "100%", height: 5, background: "rgba(255,255,255,0.1)", borderRadius: 3 }}>
+          <div style={{ height: "100%", width: `${Math.round(kmDone / TK * 100)}%`, background: "linear-gradient(90deg,#f97316,#facc15)", borderRadius: 3, transition: "width 0.4s" }} />
+        </div>
+      </div>
+      <div style={{ display: "flex", gap: 6, padding: "10px 16px", overflowX: "auto", WebkitOverflowScrolling: "touch" }}>
+        {stages.map((s, i) => (
+          <button key={s.id} onClick={() => setCur(i)} style={{
+            flexShrink: 0, width: 28, height: 28, borderRadius: "50%", fontSize: 10, fontWeight: 800,
+            border: cur === i ? "2px solid #f97316" : "2px solid rgba(255,255,255,0.12)",
+            background: cur === i ? "rgba(249,115,22,0.2)" : "rgba(255,255,255,0.05)",
+            color: cur === i ? "#facc15" : "rgba(255,255,255,0.4)",
+          }}>{s.id}</button>
+        ))}
+      </div>
+      <div style={{ padding: "0 12px 60px" }}>
+        {cur === -1 ? (
+          stages.map((s, i) => <Card key={s.id} s={s} active={false} onTap={() => setCur(i)} />)
+        ) : (
+          <>
+            <button onClick={() => setCur(-1)} style={{
+              background: "none", border: "none", color: "#f97316", fontSize: 13, fontWeight: 600, padding: "8px 0", marginBottom: 8,
+            }}>← Alle Tage</button>
+            <Card s={stages[cur]} active={true} onTap={() => {}} />
+            <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+              <button disabled={cur === 0} onClick={() => setCur(cur - 1)} style={{
+                flex: 1, padding: 11, borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)",
+                background: "rgba(255,255,255,0.05)", color: cur === 0 ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.5)",
+                fontSize: 13, fontWeight: 600,
+              }}>← Vorherige</button>
+              <button disabled={cur === 15} onClick={() => setCur(cur + 1)} style={{
+                flex: 1, padding: 11, borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)",
+                background: "rgba(255,255,255,0.05)", color: cur === 15 ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.5)",
+                fontSize: 13, fontWeight: 600,
+              }}>Nächste →</button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>
