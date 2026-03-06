@@ -101,7 +101,6 @@ function Card({ s, active, onTap }) {
         <div style={{ fontSize: 9, color: "rgba(255,255,255,0.45)", fontWeight: 600, letterSpacing: 1, marginBottom: 2 }}>HÖHENPROFIL</div>
         <div style={{ fontSize: 12, color: "rgba(255,255,255,0.65)" }}>{s.hp}</div>
       </div>
-      <div style={{ fontSize: 12, color: "rgba(255,255,255,0.55)", marginBottom: 6 }}>{s.tr}</div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 14 }}>
         {s.h.map((x, j) => (
           <span key={j} style={{ fontSize: 10, background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.65)", padding: "3px 9px", borderRadius: 12 }}>{x}</span>
