@@ -107,6 +107,9 @@ const bgs = [
 function Card({ s, active, onTap }) {
   const i = s.id - 1;
   const done = stages.slice(0, i).reduce((a, x) => a + x.km, 0);
+  const kmPct = Math.round((done + s.km) / TK * 100);
+  const hmDone = stages.slice(0, i + 1).reduce((a, x) => a + parseInt(x.el), 0);
+  const hmPct = Math.round(hmDone / TH * 100);
   return (
     <div onClick={onTap} style={{
       background: bgs[i % 16], borderRadius: 14, padding: 16, marginBottom: 10,
@@ -155,6 +158,26 @@ function Card({ s, active, onTap }) {
         {s.v.map((x, j) => (
           <div key={j} style={{ fontSize: 11, color: "rgba(255,255,255,0.6)", marginBottom: j < s.v.length - 1 ? 2 : 0 }}>{x}</div>
         ))}
+      </div>
+      <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+            <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)", fontWeight: 600, letterSpacing: 1 }}>STRECKE</span>
+            <span style={{ fontSize: 9, color: "#facc15", fontWeight: 700 }}>{kmPct}%</span>
+          </div>
+          <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 2 }}>
+            <div style={{ height: "100%", width: `${kmPct}%`, background: "linear-gradient(90deg,#f97316,#facc15)", borderRadius: 2 }} />
+          </div>
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+            <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)", fontWeight: 600, letterSpacing: 1 }}>HÖHENMETER</span>
+            <span style={{ fontSize: 9, color: "#facc15", fontWeight: 700 }}>{hmPct}%</span>
+          </div>
+          <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 2 }}>
+            <div style={{ height: "100%", width: `${hmPct}%`, background: "linear-gradient(90deg,#f97316,#facc15)", borderRadius: 2 }} />
+          </div>
+        </div>
       </div>
       <a href={s.u} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{
         display: "block", textAlign: "center", background: "linear-gradient(135deg,#f97316,#ea580c)",
