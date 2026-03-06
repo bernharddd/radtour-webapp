@@ -24,37 +24,53 @@
   <script type="text/babel">
 const { useState } = React;
 const stages = [
-  {id:1,t:"Heddesheim → Schaafheim",km:78,el:"234 hm",hp:"45 km flach, kurz vor Dieburg recht steiler Anstieg, Ende flach",tr:"Flach – Rheinebene & Bergstraße",h:["Mannheim","Lorsch (UNESCO)","Bergstraße"],e:"🏘️",
+  {id:1,t:"Heddesheim → Schaafheim",km:78,el:"234 hm",hp:"45 km flach, kurz vor Dieburg recht steiler Anstieg, Ende flach",
+   c:["Darmstadt (48 km)","Dieburg (65 km)"],l:["Oberrheinische Tiefebene (0–15 km)","Kloster Lorsch UNESCO (15 km)","Bergstraße (18 km)","Odenwald (30–78 km)"],e:"🏘️",
    u:"https://www.google.com/maps/dir/49.5077027,8.6059128/49.7838179,8.6204896/49.8901691,8.6946361/49.9225,8.9975/@49.7151,8.8017,10z/data=!4m2!4m1!3e1"},
-  {id:2,t:"Schaafheim → Wertheim",km:75,el:"102 hm",hp:"Erste 12 km bergab, Rest flach",tr:"Leicht hügelig – Main-Radweg",h:["Großwallstadt","Miltenberg","Collenberg"],e:"🍷",
+  {id:2,t:"Schaafheim → Wertheim",km:75,el:"102 hm",hp:"Erste 12 km bergab, Rest flach",
+   c:["Großwallstadt (17 km)","Miltenberg (42 km)","Wertheim (75 km)"],l:["Odenwald (0–30 km)","Main-Radweg (30–75 km)","Altstadt Miltenberg (42 km)","Burg Wertheim (75 km)"],e:"🍷",
    u:"https://www.google.com/maps/dir/49.9225,8.9975/49.8933223,9.1587533/49.7018676,9.2411675/49.7061478,9.2600825/49.7904115,9.4256821/49.7602315,9.5189756/@49.7759,9.2553,10z/data=!4m2!4m1!3e1"},
-  {id:3,t:"Wertheim → Mainbernheim",km:75,el:"322 hm",hp:"Erste 10 km flach, 25 km kontinuierlich leicht bergauf, 5 km bis Würzburg steil bergab, 30 km flach, am Ende leicht bergauf",tr:"Wellig – Main & Weinland",h:["Würzburg","Ochsenfurt","Mainbernheim"],e:"🍷",
+  {id:3,t:"Wertheim → Mainbernheim",km:75,el:"322 hm",hp:"Erste 10 km flach, 25 km kontinuierlich leicht bergauf, 5 km bis Würzburg steil bergab, 30 km flach, am Ende leicht bergauf",
+   c:["Würzburg (40 km)","Ochsenfurt (60 km)"],l:["Taubertal (0–15 km)","Würzburger Residenz UNESCO (40 km)","Ochsenfurt Altstadt (60 km)","Fränkisches Weinland (55–75 km)"],e:"🍷",
    u:"https://www.google.com/maps/dir/49.7602315,9.5189756/49.7667312,9.6309254/49.7899905,9.8484532/49.7864041,9.9273856/49.6982378,10.1407127/49.7047119,10.2192345/@49.7428,9.8131,10z/data=!4m2!4m1!3e1"},
-  {id:4,t:"Mainbernheim → Herzogenaurach",km:60,el:"249 hm",hp:"Erste 10 km bergauf, 35 km flach, 5 km recht steil bergauf, Ende leicht bergab",tr:"Hügelig – Fränkisches Land",h:["Fränk. Weinland","Steigerwald"],e:"⛰️",
+  {id:4,t:"Mainbernheim → Herzogenaurach",km:60,el:"249 hm",hp:"Erste 10 km bergauf, 35 km flach, 5 km recht steil bergauf, Ende leicht bergab",
+   c:["Neustadt (37 km)","Herzogenaurach (60 km)"],l:["Steigerwald-Rand (0–20 km)","Naturpark Steigerwald (20–40 km)","Aischtal (35 km)","Regnitztal (50–60 km)"],e:"⛰️",
    u:"https://www.google.com/maps/dir/49.704681552774325,10.21924135608538/49.6950063,10.2740359/49.6225528,10.710795/49.5765989,10.8645937/@49.6516,10.5124,10z/data=!4m2!4m1!3e1"},
-  {id:5,t:"Herzogenaurach → Freystadt",km:70,el:"258 hm",hp:"Erste 30 km bis Nürnberg flach, 25 km sehr leicht bergauf, kurzer recht steiler Anstieg, letzte 15 km flach/leicht bergab",tr:"Hügelig – über Nürnberg",h:["Nürnberg","Nürnberger Land"],e:"🏰",
+  {id:5,t:"Herzogenaurach → Freystadt",km:70,el:"258 hm",hp:"Erste 30 km bis Nürnberg flach, 25 km sehr leicht bergauf, kurzer recht steiler Anstieg, letzte 15 km flach/leicht bergab",
+   c:["Erlangen (10 km)","Fürth (20 km)","Nürnberg (28 km)"],l:["Nürnberg Kaiserburg (28 km)","Ludwig-Donau-Main-Kanal (40–70 km)","Naturpark Altmühltal (60 km)"],e:"🏰",
    u:"https://www.google.com/maps/dir/49.5765989,10.8645937/49.5549126,10.9530375/49.5563328,10.9676459/49.4542702,11.0745615/49.2892166,11.2792982/49.2312605,11.3027241/49.1880396,11.3345101/@49.3823,11.0996,10z/data=!4m2!4m1!3e1"},
-  {id:6,t:"Freystadt → Saal a.d. Donau",km:71,el:"86 hm",hp:"Erste 30 km leicht bergab, Rest komplett flach",tr:"Abfallend – Altmühltal",h:["Main-Donau-Kanal","Altmühltal"],e:"🏰",
+  {id:6,t:"Freystadt → Saal a.d. Donau",km:71,el:"86 hm",hp:"Erste 30 km leicht bergab, Rest komplett flach",
+   c:["Beilngries (25 km)","Dietfurt (33 km)","Kelheim/Saal (67 km)"],l:["Ludwig-Donau-Main-Kanal (0–15 km)","Naturpark Altmühltal (10–50 km)","Berching Stadtmauer (18 km)","Befreiungshalle Kelheim (60 km)"],e:"🏰",
    u:"https://www.google.com/maps/dir/49.1880396,11.3345101/49.1617725,11.4081595/49.0414998,11.4966515/48.9923313,11.6870152/48.9433842,11.7478331/48.927342,11.8124921/48.9121585,11.9298508/@49.0478,11.6305,10z/data=!4m2!4m1!3e1"},
-  {id:7,t:"Saal a.d. Donau → Straubing",km:87,el:"66 hm",hp:"Erste 45 km flach, Rest minimal bergab",tr:"Flach – Donauradweg",h:["Kelheim","Regensburg","Donau"],e:"🌊",
+  {id:7,t:"Saal a.d. Donau → Straubing",km:87,el:"66 hm",hp:"Erste 45 km flach, Rest minimal bergab",
+   c:["Bad Abbach (12 km)","Regensburg (32 km)","Straubing (79 km)"],l:["Donauradweg (0–87 km)","Regensburg UNESCO-Altstadt (32 km)","Walhalla (38 km)","Gäubodenlandschaft (50–87 km)"],e:"🌊",
    u:"https://www.google.com/maps/dir/48.9122752,11.9289958/48.9081425,11.9655364/48.9181018,11.9696779/48.9321754,12.0346055/48.9680414,12.0185368/48.982811,12.0434036/49.0155351,12.0331405/48.9651881,12.4540192/48.9059925,12.6536376/@48.9249,12.2720,10z/data=!4m2!4m1!3e1"},
-  {id:8,t:"Straubing → kurz vor Passau",km:77,el:"92 hm",hp:"Durchgehend flach",tr:"Flach – Donauradweg",h:["Straubing","Deggendorf","Donau-Tal"],e:"🌊",
+  {id:8,t:"Straubing → kurz vor Passau",km:77,el:"92 hm",hp:"Durchgehend flach",
+   c:["Deggendorf (30 km)","Vilshofen (62 km)"],l:["Donauradweg (0–77 km)","Kloster Metten (25 km)","Donautal (0–77 km)"],e:"🌊",
    u:"https://www.google.com/maps/dir/48.9055457,12.6561928/48.5992683,13.3767113/@48.7709,12.9950,10z/data=!4m2!4m1!3e1"},
-  {id:9,t:"kurz vor Passau → Untermühl",km:66,el:"147 hm",hp:"Erste 40 km flach, dann 2 starke Anstiege und anschl. Gefälle, Ende flach",tr:"Donauradweg DE → AT",h:["Passau","Schlögener Schlinge","Grenze AT"],e:"🇦🇹",
+  {id:9,t:"kurz vor Passau → Untermühl",km:66,el:"147 hm",hp:"Erste 40 km flach, dann 2 starke Anstiege und anschl. Gefälle, Ende flach",
+   c:["Passau (5 km)","Obernzell (25 km)"],l:["Dreiflüssestadt Passau / Dom (5 km)","Donauradweg (0–66 km)","Engelhartszell Kloster (30 km)","Schlögener Schlinge (45 km)"],e:"🇦🇹",
    u:"https://www.google.com/maps/dir/48.5990702,13.3768391/48.4489141,13.8526752/48.4182748,13.9719854/@48.5082,13.6734,10z/data=!4m2!4m1!3e1"},
-  {id:10,t:"Untermühl → Wallsee",km:78,el:"148 hm",hp:"Am Anfang sehr steiler Anstieg + Gefälle, Rest flach bis leicht bergab",tr:"Flach – Donau Oberösterreich",h:["Linz","Strudengau","Enns"],e:"🎵",
+  {id:10,t:"Untermühl → Wallsee",km:78,el:"148 hm",hp:"Am Anfang sehr steiler Anstieg + Gefälle, Rest flach bis leicht bergab",
+   c:["Ottensheim (26 km)","Linz (37 km)"],l:["Donauradweg (0–78 km)","Linz Altstadt (37 km)","Enns – älteste Stadt AT (55 km)","Strudengau (60–78 km)"],e:"🎵",
    u:"https://www.google.com/maps/dir/48.4188907,13.9729394/48.3450051,14.0240784/48.3226639,14.3151378/48.1733479,14.7026545/@48.2667,14.2994,10z/data=!4m2!4m1!3e1"},
-  {id:11,t:"Wallsee → Bacharnsdorf",km:83,el:"149 hm",hp:"Erste 20 km flach, dann 2 kleine Anstiege + Gefälle, 40 km flach, kleiner Anstieg + Gefälle, letzte 13 km flach",tr:"Flach – Wachau (UNESCO)",h:["Stift Melk","Wachau","Spitz"],e:"🍷",
+  {id:11,t:"Wallsee → Bacharnsdorf",km:83,el:"149 hm",hp:"Erste 20 km flach, dann 2 kleine Anstiege + Gefälle, 40 km flach, kleiner Anstieg + Gefälle, letzte 13 km flach",
+   c:["Grein (17 km)","Ybbs (37 km)","Melk (64 km)"],l:["Strudengau (0–10 km)","Stift Melk UNESCO (64 km)","Wachau UNESCO (64–83 km)","Burgruine Aggstein (72 km)"],e:"🍷",
    u:"https://www.google.com/maps/dir/48.1743048,14.7029707/48.3705277,15.4470324/@48.2451,15.0350,10z/data=!4m2!4m1!3e1"},
-  {id:12,t:"Bacharnsdorf → Langenzersdorf",km:87,el:"54 hm",hp:"Immer flach oder leicht bergab",tr:"Flach – Donau nach Wien",h:["Krems","Tulln","Wien-Nähe"],e:"🏙️",
+  {id:12,t:"Bacharnsdorf → Langenzersdorf",km:87,el:"54 hm",hp:"Immer flach oder leicht bergab",
+   c:["Krems (15 km)","Tulln (57 km)"],l:["Wachau UNESCO (0–15 km)","Dürnstein Altstadt (10 km)","Stift Göttweig (25 km)","Stift Klosterneuburg (75 km)"],e:"🏙️",
    u:"https://www.google.com/maps/dir/48.3707403,15.4476517/48.3933531,15.4751172/48.2990366,16.3654614/@48.3394,15.8954,10z/data=!4m2!4m1!3e1"},
-  {id:13,t:"Langenzersdorf → Bratislava",km:86,el:"52 hm",hp:"60 km flach, kleiner Anstieg + Gefälle, Ende flach",tr:"Topfeben – Donau-Auen",h:["Wien","Donau-Auen","Bratislava"],e:"🏙️",
+  {id:13,t:"Langenzersdorf → Bratislava",km:86,el:"52 hm",hp:"60 km flach, kleiner Anstieg + Gefälle, Ende flach",
+   c:["Wien (12 km)","Bratislava (75 km)"],l:["Donauinsel Wien (5 km)","Nationalpark Donau-Auen (30–65 km)","Römerstadt Carnuntum (50 km)","Hainburg Altstadt (65 km)"],e:"🏙️",
    u:"https://www.google.com/maps/dir/48.2990366,16.3654614/48.2017752,16.449447/48.1162706,17.080595/@48.2106,16.7131,10z/data=!4m2!4m1!3e1"},
-  {id:14,t:"Bratislava → Böny",km:82,el:"47 hm",hp:"Erste 70 km flach, dann 30 hm Anstieg, kurz flach, kleines Gefälle, letzte 5 km flach",tr:"Topfeben – Donauebene",h:["Bratislava","Grenze HU","Böny"],e:"🇭🇺",
+  {id:14,t:"Bratislava → Böny",km:82,el:"47 hm",hp:"Erste 70 km flach, dann 30 hm Anstieg, kurz flach, kleines Gefälle, letzte 5 km flach",
+   c:["Győr (63 km)"],l:["Bratislava Burg & Altstadt (0 km)","Donauradweg (0–60 km)","Szigetköz-Auenlandschaft (40–60 km)"],e:"🇭🇺",
    u:"https://www.google.com/maps/dir/48.1162706,17.080595/48.1421,17.1002/47.6875,17.6504/47.6599153,17.8203416/@47.8962,17.3732,10z/data=!4m2!4m1!3e1"},
-  {id:15,t:"Böny → Fehérvárcsurgó",km:62,el:"177 hm",hp:"20 km flach, 20 km leicht bergauf, 20 km leicht bergab",tr:"Leicht hügelig – Tiefebene",h:["Pannonhalma","Bakony-Rand"],e:"🌻",
+  {id:15,t:"Böny → Fehérvárcsurgó",km:62,el:"177 hm",hp:"20 km flach, 20 km leicht bergauf, 20 km leicht bergab",
+   c:["Kisbér (30 km)","Mór (51 km)"],l:["Abtei Pannonhalma UNESCO (15 km)","Bakonyalja-Hügelland (30–62 km)","Csesznek Burgruine (45 km)"],e:"🌻",
    u:"https://www.google.com/maps/dir/47.6599153,17.8203416/47.295121,18.262587/@47.4857,17.9827,10z/data=!4m2!4m1!3e1"},
-  {id:16,t:"Fehérvárcsurgó → Paloznak",km:67,el:"213 hm",hp:"Hügelig, 30 km recht flach, 15 km teilweise steil bergauf, 13 km teilweise steil bergab, letzte 10 km flach",tr:"Hügelig → Balaton",h:["Székesfehérvár","Balatonfüred","Balaton!"],e:"🏖️",
+  {id:16,t:"Fehérvárcsurgó → Paloznak",km:67,el:"213 hm",hp:"Hügelig, 30 km recht flach, 15 km teilweise steil bergauf, 13 km teilweise steil bergab, letzte 10 km flach",
+   c:["Balatonfüzfő (52 km)","Balatonalmádi (58 km)"],l:["Bakony-Wald (0–25 km)","Veszprém Burgviertel (20 km)","Balaton-Oberland (40–67 km)","Balatonfüred & Plattensee (55 km)"],e:"🏖️",
    u:"https://www.google.com/maps/dir/47.2909163,18.2659226/47.2777082,18.284337/47.2052997,18.2574015/47.1957443,18.2513916/47.1403379,18.2209275/47.1526325,18.1256031/47.0900025,18.0339073/46.9795072,17.9441389/@47.1374,18.1219,10z/data=!4m2!4m1!3e1"},
 ];
 const TK = stages.reduce((a, s) => a + s.km, 0);
@@ -101,9 +117,14 @@ function Card({ s, active, onTap }) {
         <div style={{ fontSize: 9, color: "rgba(255,255,255,0.45)", fontWeight: 600, letterSpacing: 1, marginBottom: 2 }}>HÖHENPROFIL</div>
         <div style={{ fontSize: 12, color: "rgba(255,255,255,0.65)" }}>{s.hp}</div>
       </div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 5 }}>
+        {s.c.map((x, j) => (
+          <span key={j} style={{ fontSize: 10, background: "rgba(59,130,246,0.15)", color: "rgba(147,197,253,0.9)", padding: "3px 9px", borderRadius: 12 }}>📍 {x}</span>
+        ))}
+      </div>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 14 }}>
-        {s.h.map((x, j) => (
-          <span key={j} style={{ fontSize: 10, background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.65)", padding: "3px 9px", borderRadius: 12 }}>{x}</span>
+        {s.l.map((x, j) => (
+          <span key={j} style={{ fontSize: 10, background: "rgba(34,197,94,0.12)", color: "rgba(134,239,172,0.9)", padding: "3px 9px", borderRadius: 12 }}>🏞️ {x}</span>
         ))}
       </div>
       <a href={s.u} target="_blank" rel="noopener noreferrer" onClick={e => e.stopPropagation()} style={{
