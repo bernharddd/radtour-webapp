@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#0a0f0a">
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="icon-192.png">
-  <title>Radtour Heddesheim → Paloznak</title>
+  <title>Radtouren</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body { background: #0a0f0a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; overflow-x: hidden; }
@@ -23,7 +23,7 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
 const { useState } = React;
-const stages = [
+const stagesHP = [
   {id:1,t:"Heddesheim → Schaafheim",km:78,el:"234 hm",hp:"45 km flach, kurz vor Dieburg recht steiler Anstieg, Ende flach",
    c:["Darmstadt (48 km)","Dieburg (65 km)"],l:["Oberrheinische Tiefebene (0–15 km)","Kloster Lorsch UNESCO (15 km)","Bergstraße (18 km)","Odenwald (30–78 km)"],
    v:["🥐 Bäckerei Theurer, Heddesheim (0 km)","🛒 REWE, Darmstadt (48 km)","🍽️ Bayerischer Biergarten, Darmstadt (48 km)","🍽️ Sportlerschänke, Schaafheim (78 km)"],e:"🏘️",
@@ -92,8 +92,32 @@ const stages = [
    v:["🥐 Tölgyfa Fogadó, Fehérvárcsurgó (0 km)","🛒 SPAR, Balatonfüzfő (52 km)","🍽️ Naturkert Étterem, Balatonalmádi (58 km)","🍽️ Safránykert Vendéglő, Paloznak (67 km)"],e:"🏖️",
    u:"https://www.google.com/maps/dir/47.2909163,18.2659226/47.2777082,18.284337/47.2052997,18.2574015/47.1957443,18.2513916/47.1403379,18.2209275/47.1526325,18.1256031/47.0900025,18.0339073/46.9795072,17.9441389/@47.1374,18.1219,10z/data=!4m2!4m1!3e1"},
 ];
-const TK = stages.reduce((a, s) => a + s.km, 0);
-const TH = stages.reduce((a, s) => a + parseInt(s.el), 0);
+const stagesBM = [
+  {id:1,t:"Bretten → Heilbronn",km:55,el:"280 hm",hp:"Hügelig durch den Kraichgau, mehrere kurze Anstiege und Abfahrten",
+   c:["Eppingen (25 km)","Heilbronn (55 km)"],l:["Kraichgau Hügelland (0–55 km)","Eppingen Fachwerkaltstadt (25 km)","Experimenta Heilbronn (55 km)"],
+   v:["🥐 Bäckerei Heitzmann, Bretten (0 km)","🛒 REWE, Eppingen (25 km)","🍽️ Gasthof Ochsen, Eppingen (25 km)","🍽️ Insel-Hotel, Heilbronn (55 km)"],e:"🏘️",
+   u:"https://www.google.com/maps/dir/49.0367,8.7075/49.1369,8.9117/49.1399,9.2202/@49.09,8.97,11z/data=!4m2!4m1!3e1"},
+  {id:2,t:"Heilbronn → Schwäbisch Hall",km:65,el:"320 hm",hp:"Erste 15 km bergauf auf die Hohenloher Ebene, dann entlang des Kochers, Ende bergauf nach SHA",
+   c:["Öhringen (25 km)","Schwäbisch Hall (65 km)"],l:["Kochertal-Radweg (15–65 km)","Öhringen Hofgarten (25 km)","Schwäbisch Hall Altstadt (65 km)","Freilichtspiele SHA (65 km)"],
+   v:["🥐 Bäckerei Härdtner, Heilbronn (0 km)","🛒 EDEKA, Öhringen (25 km)","🍽️ Gasthof Krone, Öhringen (25 km)","🍽️ Rebers Pflug, Schwäbisch Hall (65 km)"],e:"🏰",
+   u:"https://www.google.com/maps/dir/49.1399,9.2202/49.1997,9.5079/49.1108,9.7375/@49.17,9.48,11z/data=!4m2!4m1!3e1"},
+  {id:3,t:"Schwäbisch Hall → Nördlingen",km:85,el:"380 hm",hp:"30 km entlang der Jagst, Frankenhöhe-Überquerung mit Anstiegen, ab Dinkelsbühl bergab ins Ries",
+   c:["Crailsheim (30 km)","Dinkelsbühl (55 km)","Nördlingen (85 km)"],l:["Jagsttal (0–30 km)","Dinkelsbühl Altstadt (55 km)","Nördlinger Ries (75–85 km)","Stadtmauer Nördlingen (85 km)"],
+   v:["🥐 Bäckerei Vetter, Schwäbisch Hall (0 km)","🛒 REWE, Dinkelsbühl (55 km)","🍽️ Haus Appelberg, Dinkelsbühl (55 km)","🍽️ Café Radlos, Nördlingen (85 km)"],e:"🏰",
+   u:"https://www.google.com/maps/dir/49.1108,9.7375/49.1338,10.0706/49.0699,10.319/48.851,10.4885/@49.0,10.1,10z/data=!4m2!4m1!3e1"},
+  {id:4,t:"Nördlingen → Augsburg",km:75,el:"120 hm",hp:"15 km leicht bergab, Donauquerung bei Donauwörth, dann entlang des Lech flach nach Süden",
+   c:["Donauwörth (30 km)","Rain am Lech (40 km)","Augsburg (75 km)"],l:["Nördlinger Ries (0–15 km)","Donauwörth Altstadt (30 km)","Lechtal-Radweg (35–75 km)","Augsburg Fuggerei (75 km)"],
+   v:["🥐 Bäckerei Lehner, Nördlingen (0 km)","🛒 EDEKA, Donauwörth (30 km)","🍽️ Posthotel Traube, Donauwörth (30 km)","🍽️ McDonald's, Augsburg (75 km)"],e:"🌊",
+   u:"https://www.google.com/maps/dir/48.851,10.4885/48.718,10.7794/48.3705,10.8978/@48.61,10.69,10z/data=!4m2!4m1!3e1"},
+  {id:5,t:"Augsburg → München",km:70,el:"80 hm",hp:"Durchgehend flach durch die Münchner Schotterebene",
+   c:["Dachau (45 km)","München (70 km)"],l:["Wittelsbacher Land (0–25 km)","Dachau Altstadt & Schloss (45 km)","Olympiapark München (65 km)","Marienplatz München (70 km)"],
+   v:["🥐 Bäckerei Wolf, Augsburg (0 km)","🛒 REWE, Dachau (45 km)","🍽️ Gasthof Drei Rosen, Dachau (45 km)","🍽️ Augustiner Bräustuben, München (70 km)"],e:"🏙️",
+   u:"https://www.google.com/maps/dir/48.3705,10.8978/48.2603,11.434/48.1351,11.582/@48.25,11.24,10z/data=!4m2!4m1!3e1"},
+];
+const allRoutes = [
+  { name: "Heddesheim → Paloznak", extra: " · 4 LÄNDER", stages: stagesHP },
+  { name: "Bretten → München", extra: "", stages: stagesBM },
+];
 const bgs = [
   "linear-gradient(135deg,#1a3a2a,#2d5a3f)","linear-gradient(135deg,#2a1a3a,#4a2d6a)",
   "linear-gradient(135deg,#3a2a1a,#6a4a2d)","linear-gradient(135deg,#1a2a3a,#2d4a6a)",
@@ -104,12 +128,12 @@ const bgs = [
   "linear-gradient(135deg,#1a2a2a,#2d4a4a)","linear-gradient(135deg,#2a1a2a,#4a2d4a)",
   "linear-gradient(135deg,#2a3a2a,#3d6a3f)","linear-gradient(135deg,#1a2a1a,#2d5a2d)",
 ];
-function Card({ s, active, onTap }) {
+function Card({ s, active, onTap, stages, tk, th }) {
   const i = s.id - 1;
   const done = stages.slice(0, i).reduce((a, x) => a + x.km, 0);
-  const kmPct = Math.round((done + s.km) / TK * 100);
+  const kmPct = Math.round((done + s.km) / tk * 100);
   const hmDone = stages.slice(0, i + 1).reduce((a, x) => a + parseInt(x.el), 0);
-  const hmPct = Math.round(hmDone / TH * 100);
+  const hmPct = Math.round(hmDone / th * 100);
   return (
     <div onClick={onTap} style={{
       background: bgs[i % 16], borderRadius: 14, padding: 16, marginBottom: 10,
@@ -190,13 +214,29 @@ function Card({ s, active, onTap }) {
   );
 }
 function App() {
+  const [routeIdx, setRouteIdx] = useState(0);
   const [cur, setCur] = useState(-1);
+  const r = allRoutes[routeIdx];
+  const stages = r.stages;
+  const TK = stages.reduce((a, s) => a + s.km, 0);
+  const TH = stages.reduce((a, s) => a + parseInt(s.el), 0);
   const kmDone = cur >= 0 ? stages.slice(0, cur).reduce((a, s) => a + s.km, 0) : 0;
+  const switchRoute = (idx) => { setRouteIdx(idx); setCur(-1); };
   return (
     <div style={{ background: "#0a0f0a", minHeight: "100vh", minHeight: "100dvh", maxWidth: 480, margin: "0 auto", fontFamily: "-apple-system,BlinkMacSystemFont,sans-serif" }}>
-      <div style={{ padding: "16px 16px 12px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
-        <div style={{ fontSize: 18, fontWeight: 800, color: "#fff", marginBottom: 3 }}>🚲 Heddesheim → Paloznak</div>
-        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", letterSpacing: 0.5, marginBottom: 8 }}>{TK} KM · {TH} HM · 16 TAGE · 4 LÄNDER</div>
+      <div style={{ display: "flex", gap: 8, padding: "12px 16px 0" }}>
+        {allRoutes.map((rt, idx) => (
+          <button key={idx} onClick={() => switchRoute(idx)} style={{
+            flex: 1, padding: "8px 4px", borderRadius: 10, fontSize: 11, fontWeight: 700,
+            border: routeIdx === idx ? "2px solid #f97316" : "2px solid rgba(255,255,255,0.1)",
+            background: routeIdx === idx ? "rgba(249,115,22,0.15)" : "rgba(255,255,255,0.05)",
+            color: routeIdx === idx ? "#facc15" : "rgba(255,255,255,0.4)",
+          }}>{rt.name}</button>
+        ))}
+      </div>
+      <div style={{ padding: "12px 16px 12px", borderBottom: "1px solid rgba(255,255,255,0.08)" }}>
+        <div style={{ fontSize: 18, fontWeight: 800, color: "#fff", marginBottom: 3 }}>🚲 {r.name}</div>
+        <div style={{ fontSize: 11, color: "rgba(255,255,255,0.4)", letterSpacing: 0.5, marginBottom: 8 }}>{TK} KM · {TH} HM · {stages.length} TAGE{r.extra}</div>
         <div style={{ width: "100%", height: 5, background: "rgba(255,255,255,0.1)", borderRadius: 3 }}>
           <div style={{ height: "100%", width: `${Math.round(kmDone / TK * 100)}%`, background: "linear-gradient(90deg,#f97316,#facc15)", borderRadius: 3, transition: "width 0.4s" }} />
         </div>
@@ -213,22 +253,22 @@ function App() {
       </div>
       <div style={{ padding: "0 12px 60px" }}>
         {cur === -1 ? (
-          stages.map((s, i) => <Card key={s.id} s={s} active={false} onTap={() => setCur(i)} />)
+          stages.map((s, i) => <Card key={s.id} s={s} active={false} onTap={() => setCur(i)} stages={stages} tk={TK} th={TH} />)
         ) : (
           <>
             <button onClick={() => setCur(-1)} style={{
               background: "none", border: "none", color: "#f97316", fontSize: 13, fontWeight: 600, padding: "8px 0", marginBottom: 8,
             }}>← Alle Tage</button>
-            <Card s={stages[cur]} active={true} onTap={() => {}} />
+            <Card s={stages[cur]} active={true} onTap={() => {}} stages={stages} tk={TK} th={TH} />
             <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
               <button disabled={cur === 0} onClick={() => setCur(cur - 1)} style={{
                 flex: 1, padding: 11, borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)",
                 background: "rgba(255,255,255,0.05)", color: cur === 0 ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.5)",
                 fontSize: 13, fontWeight: 600,
               }}>← Vorherige</button>
-              <button disabled={cur === 15} onClick={() => setCur(cur + 1)} style={{
+              <button disabled={cur === stages.length - 1} onClick={() => setCur(cur + 1)} style={{
                 flex: 1, padding: 11, borderRadius: 10, border: "1px solid rgba(255,255,255,0.1)",
-                background: "rgba(255,255,255,0.05)", color: cur === 15 ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.5)",
+                background: "rgba(255,255,255,0.05)", color: cur === stages.length - 1 ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.5)",
                 fontSize: 13, fontWeight: 600,
               }}>Nächste →</button>
             </div>
