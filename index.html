@@ -162,12 +162,12 @@ function Card({ s, active, onTap, stages, tk, th }) {
       {s.gr && <div style={{ background: "rgba(255,255,255,0.06)", border: "1px dashed rgba(255,255,255,0.2)", borderRadius: 8, padding: "7px 10px", marginBottom: 10, textAlign: "center" }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: "#facc15" }}>{s.gr}</div>
       </div>}
-      <div style={{ background: "rgba(251,146,60,0.08)", borderRadius: 8, padding: "6px 10px", marginBottom: 14 }}>
+      {s.v && <div style={{ background: "rgba(251,146,60,0.08)", borderRadius: 8, padding: "6px 10px", marginBottom: 14 }}>
         <div style={{ fontSize: 9, color: "rgba(255,255,255,0.45)", fontWeight: 600, letterSpacing: 1, marginBottom: 4 }}>VERSORGUNG</div>
         {s.v.map((x, j) => (
           <div key={j} style={{ fontSize: 11, color: "rgba(255,255,255,0.6)", marginBottom: j < s.v.length - 1 ? 2 : 0 }}>{x}</div>
         ))}
-      </div>
+      </div>}
       <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
         <div style={{ flex: 1 }}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
